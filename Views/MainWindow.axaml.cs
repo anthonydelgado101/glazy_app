@@ -1,8 +1,9 @@
-// using System;
+using System;
 using ASTEM_DB.ViewModels;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
 
 namespace ASTEM_DB.Views
 {
@@ -30,6 +31,40 @@ namespace ASTEM_DB.Views
                         vm.IsSidebarVisible = true;
                     }
                 }
+            }
+        }
+
+        private async void OnAiImageButtonClicked(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is not MainWindowViewModel vm)
+                return;
+
+            try
+            {
+                var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+                {
+                    Title = "Select a tile image",
+                    AllowMultiple = false,
+                    FileTypeFilter = new[]
+                    {
+                        new FilePickerFileType("Image files")
+                        {
+                            Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp" },
+                            MimeTypes = new[] { "image/png", "image/jpeg", "image/webp", "image/bmp" }
+                        }
+                    }
+                });
+
+                if (files.Count == 0)
+                    return;
+
+                var selected = files[0];
+                var imagePath = selected.Path.IsFile ? selected.Path.LocalPath : selected.Name;
+                vm.SetPendingAiSearchImage(imagePath);
+            }
+            catch (Exception ex)
+            {
+                vm.SetAiSearchImageSelectionError(ex.Message);
             }
         }
 
