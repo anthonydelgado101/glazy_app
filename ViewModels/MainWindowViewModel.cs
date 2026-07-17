@@ -207,6 +207,12 @@ namespace ASTEM_DB.ViewModels
             {
                 // Search was canceled, do nothing
             }
+            catch (Exception ex)
+            {
+                CardItems.Clear();
+                IsFilterEmpty = true;
+                AiSearchStatus = $"Database unavailable: {CleanProcessMessage(ex.Message)}";
+            }
         }
 
         private string _aiSearchPrompt = string.Empty;
@@ -1086,24 +1092,43 @@ namespace ASTEM_DB.ViewModels
             GlazeTypes.Clear();
             GlazeTypes.Add("All");
 
-            var glazeTypes = await db.GetGlazeTypesAsync();
-            foreach (var type in glazeTypes)
-                GlazeTypes.Add(type);
+            try
+            {
+                var glazeTypes = await db.GetGlazeTypesAsync();
+                foreach (var type in glazeTypes)
+                    GlazeTypes.Add(type);
+            }
+            catch (Exception ex)
+            {
+                AiSearchStatus = $"Database unavailable: {CleanProcessMessage(ex.Message)}";
+            }
 
             // Load Surface Conditions
             SurfaceConditions.Clear();
             SurfaceConditions.Add("All");
 
-            var surfaceConditions = await db.GetSurfaceCondition();
-            foreach (var sc in surfaceConditions)
-                SurfaceConditions.Add(sc);
+            try
+            {
+                var surfaceConditions = await db.GetSurfaceCondition();
+                foreach (var sc in surfaceConditions)
+                    SurfaceConditions.Add(sc);
+            }
+            catch
+            {
+            }
 
             FiringTypes.Clear();
             FiringTypes.Add("All");
 
-            var firingTypes = await db.GetFiringType();
-            foreach (var ft in firingTypes)
-                FiringTypes.Add(ft);
+            try
+            {
+                var firingTypes = await db.GetFiringType();
+                foreach (var ft in firingTypes)
+                    FiringTypes.Add(ft);
+            }
+            catch
+            {
+            }
 
             // Set ColorPalettes
             ColorPalettes.Clear();

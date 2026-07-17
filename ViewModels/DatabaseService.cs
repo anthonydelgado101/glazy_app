@@ -91,13 +91,14 @@ namespace ASTEM_DB.Services
                 await using var conn = new MySqlConnection(_connectionString);
                 await conn.OpenAsync();
 
-                string query = "SELECT FiringType FROM testpiece GROUP BY FiringType";
+                string query = "SELECT FiringType FROM testpiece WHERE FiringType IS NOT NULL AND FiringType <> '' GROUP BY FiringType";
                 await using var cmd = new MySqlCommand(query, conn);
                 await using var reader = await cmd.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
                 {
-                    firingTypes.Add(reader.GetString("FiringType"));
+                    if (reader["FiringType"] is string firingType && !string.IsNullOrWhiteSpace(firingType))
+                        firingTypes.Add(firingType);
                 }
             }
             catch (Exception ex)
