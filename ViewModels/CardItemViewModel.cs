@@ -141,5 +141,12 @@ namespace ASTEM_DB.ViewModels
             get => _colorName;
             set => this.RaiseAndSetIfChanged(ref _colorName, value);
         }
+
+        private string _memo = string.Empty;
+        public string Memo
+        {
+            get => _memo;
+            set => this.RaiseAndSetIfChanged(ref _memo, value);
+        }
     }
 }

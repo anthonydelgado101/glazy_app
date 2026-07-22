@@ -182,6 +182,24 @@
                     <TextBlock HorizontalAlignment="Center" TextAlignment="Center">
                         <Run Text="{Binding SelectedCard.ColorName}" />
                     </TextBlock>
+
+                    <TextBlock HorizontalAlignment="Center" TextAlignment="Center">
+                        <Run FontWeight="DemiBold" TextDecorations="Underline" Text="Memo" />
+                    </TextBlock>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap"
+                        IsVisible="{Binding SelectedCard.Memo, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <Run Text="{Binding SelectedCard.Memo}" />
+                    </TextBlock>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        TextAlignment="Center"
+                        FontStyle="Italic"
+                        Foreground="Gray"
+                        IsVisible="{Binding SelectedCard.Memo, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                        Text="No memo" />
                     <!-- <TextBlock Text="{Binding SelectedCard.ImagePath}"/> -->
                     <!-- <TextBlock Text="{Binding SelectedCard.Lab}" /> -->
 
